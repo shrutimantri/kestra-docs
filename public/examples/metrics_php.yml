@@ -1,0 +1,19 @@
+id: php_metrics
+namespace: company.team
+
+tasks:
+  - id: php
+    type: io.kestra.plugin.scripts.shell.Commands
+    taskRunner:
+      type: io.kestra.plugin.scripts.runner.docker.Docker
+    containerImage: php:8.4-rc-alpine
+    inputFiles:
+      main.php: |
+        <?php
+        echo "There are 20 products in the cart\n";
+        echo "::{\"outputs\":{\"productCount\":20}}::\n";
+        echo "::{\"metrics\":[{\"name\":\"productCount\",\"type\":\"counter\",\"value\":20}]}::\n";
+        echo "::{\"metrics\":[{\"name\":\"purchaseTime\",\"type\":\"timer\",\"value\":32.44}]}::";
+        ?>
+    commands:
+      - php main.php

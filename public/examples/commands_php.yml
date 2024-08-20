@@ -1,0 +1,13 @@
+id: php_commands
+namespace: company.team
+
+tasks:
+  - id: php
+    type: io.kestra.plugin.scripts.shell.Commands
+    taskRunner:
+      type: io.kestra.plugin.scripts.runner.docker.Docker
+    containerImage: php:8.4-rc-alpine
+    namespaceFiles:
+      enabled: true
+    commands:
+      - php main.php

@@ -1,0 +1,37 @@
+id: php_script
+namespace: company.team
+
+tasks:
+  - id: php
+    type: io.kestra.plugin.scripts.shell.Commands
+    taskRunner:
+      type: io.kestra.plugin.scripts.runner.docker.Docker
+    containerImage: php:8.4-rc-alpine
+    inputFiles:
+      main.php: |
+        <?php
+        // Open the file for writing
+        $file = fopen('output.txt', 'w');
+        
+        // Check if the file was opened successfully
+        if ($file) {
+            // Write the content to the file
+            fwrite($file, "Hello, World!\n");
+        
+            // Close the file
+            fclose($file);
+        
+            echo "Successfully wrote to the file.";
+        } else {
+            // Error handling if file could not be opened
+            echo "Cannot open file";
+        }
+        ?>
+    outputFiles:
+      - output.txt
+    commands:
+      - php main.php
+
+  - id: log
+    type: io.kestra.plugin.core.log.Log
+    message: "{{ read(outputs.php.outputFiles['output.txt']) }}"

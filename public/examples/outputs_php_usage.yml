@@ -1,0 +1,20 @@
+id: php_outputs
+namespace: company.team
+
+tasks:
+  - id: php
+    type: io.kestra.plugin.scripts.shell.Commands
+    taskRunner:
+      type: io.kestra.plugin.scripts.runner.docker.Docker
+    containerImage: php:8.4-rc-alpine
+    inputFiles:
+      main.php: |
+        <?php
+        echo "::{\"outputs\":{\"test\":\"value\",\"int\":2,\"bool\":true,\"float\":3.65}}::";
+        ?>
+    commands:
+      - php main.php
+
+  - id: return
+    type: io.kestra.plugin.core.debug.Return
+    format: '{{ outputs.php.vars.test }}'
